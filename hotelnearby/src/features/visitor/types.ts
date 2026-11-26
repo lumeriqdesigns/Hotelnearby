@@ -1,0 +1,20 @@
+export type VisitorProperty = {
+  id: string;
+  name: string;
+  slug: string;
+  city: string | null;
+  neighbourhood: string | null;
+  price: number | null;
+  priceBasis: string | null;
+  image: string | null;
+  category: string;
+  bedrooms?: number | null;
+  bathrooms?: number | null;
+  guests?: number | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  amenities?: string[];
+  features?: string[];
+  landmarks?: { name: string; distance: string | null }[];
+};
+export const VISITOR_STORAGE_KEY = "hotelnearby.visitor.v1";

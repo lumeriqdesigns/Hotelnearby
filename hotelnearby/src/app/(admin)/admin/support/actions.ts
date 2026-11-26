@@ -1,0 +1,4 @@
+"use server";
+import { revalidatePath } from "next/cache";
+import { requirePlatformRoles } from "@/features/auth/authorization";
+export async function updateSupportRequestAction(fd:FormData){const {supabase,profile}=await requirePlatformRoles(["administrator","editor_moderator"]);if(profile.role!=="administrator"){const {data}=await supabase.rpc("has_staff_permission",{p_permission_key:"support.manage"});if(data!==true)throw new Error("Support management permission required.");}const id=String(fd.get("id")??"");const status=String(fd.get("status")??"");const note=String(fd.get("note")??"").trim();if(!id||note.length<5)throw new Error("A support request and staff note are required.");const {data,error}=await supabase.rpc("admin_update_support_request",{p_id:id,p_status:status,p_note:note});if(error||data!==true)throw new Error(error?.message||"Could not update support request.");revalidatePath("/admin/support");}

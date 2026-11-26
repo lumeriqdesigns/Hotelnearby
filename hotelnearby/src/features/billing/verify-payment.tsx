@@ -1,0 +1,6 @@
+"use client";
+import { useState } from "react";
+export function VerifyPayment({ reference }: { reference: string }) {
+  const [message, setMessage] = useState(""); const [busy, setBusy] = useState(false);
+  return <div className="rounded-xl border border-border bg-surface p-4"><p className="font-bold">Payment returned from Paystack</p><p className="mt-1 text-xs text-muted-foreground">Reference: {reference}. A browser redirect does not confirm payment. Access is activated only after server verification or a signed webhook.</p><button disabled={busy} onClick={async () => { setBusy(true); try { const r = await fetch("/api/billing/verify", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ reference }) }); const data = await r.json(); setMessage(data.message ?? (data.verified ? "Payment verified and access updated." : data.error ?? "Payment not yet confirmed.")); if (data.verified) window.location.reload(); } catch { setMessage("Could not verify payment. Please try again shortly."); } finally { setBusy(false); } }} className="mt-3 rounded-md bg-primary px-4 py-2 text-sm font-bold text-primary-foreground disabled:opacity-50">{busy ? "Verifying…" : "Verify payment"}</button>{message ? <p role="status" className="mt-2 text-sm">{message}</p> : null}</div>;
+}

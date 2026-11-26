@@ -1,0 +1,204 @@
+@import "tailwindcss";
+@import "../styles/tokens.css";
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--border);
+  }
+
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Visible keyboard focus in the approved light theme. */
+  :focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--accent);
+    color: var(--accent-foreground);
+  }
+
+  /* Stop the page scrolling behind an open modal dialog. */
+  html:has(dialog[open]) {
+    overflow: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Hotelnearby visual system: bento structure with restrained glass surfaces. */
+@layer components {
+  .hotel-bento-grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .hotel-bento-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (min-width: 1024px) {
+    .hotel-bento-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.15rem; }
+    .hotel-bento-grid > :first-child { grid-row: span 2; }
+    .hotel-bento-grid > :first-child > div:first-child { height: 17rem; }
+  }
+
+  @media (min-width: 1024px) {
+    .hotel-provider-metrics > :first-child { grid-column: span 2; }
+    .hotel-admin-metrics > :first-child { grid-column: span 2; grid-row: span 2; }
+  }
+
+  .hotel-bento-card {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid rgb(216 221 228 / 0.9);
+    border-radius: 1.25rem;
+    background: rgb(255 255 255 / 0.94);
+    box-shadow: 0 2px 8px rgb(23 43 70 / 0.035), 0 16px 34px -26px rgb(23 43 70 / 0.24);
+    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+  }
+
+  .hotel-bento-card:hover {
+    border-color: rgb(201 166 107 / 0.72);
+    box-shadow: 0 12px 34px -22px rgb(23 43 70 / 0.3);
+  }
+
+  .hotel-glass-panel {
+    border: 1px solid rgb(255 255 255 / 0.62);
+    background: rgb(255 255 255 / 0.78);
+    -webkit-backdrop-filter: blur(22px) saturate(145%);
+    backdrop-filter: blur(22px) saturate(145%);
+    box-shadow: 0 24px 70px -34px rgb(7 19 36 / 0.48), inset 0 1px 0 rgb(255 255 255 / 0.72);
+  }
+
+  .hotel-glass-nav {
+    background: rgb(255 254 250 / 0.86);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    backdrop-filter: blur(18px) saturate(150%);
+  }
+
+  .hotel-public-shell {
+    background: linear-gradient(180deg, #fbfaf7 0%, #f5f2eb 38rem, #f7f7f5 100%);
+  }
+
+  .hotel-dashboard-shell {
+    background: radial-gradient(ellipse at 92% 0%, rgb(201 166 107 / 0.12), transparent 34rem),
+      linear-gradient(145deg, #f8f6f1 0%, #eef1f4 58%, #f5f2eb 100%);
+  }
+
+  .hotel-auth-shell {
+    background: radial-gradient(ellipse at 12% 10%, rgb(201 166 107 / 0.18), transparent 28rem),
+      radial-gradient(ellipse at 88% 82%, rgb(23 43 70 / 0.09), transparent 30rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hotel-bento-card { transition: none; }
+}
+
+@layer components {
+  .provider-sidebar {
+    isolation: isolate;
+    background: linear-gradient(155deg, #142b40 0%, #18384d 54%, #102334 100%);
+  }
+  .provider-sidebar-image {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    background-image: linear-gradient(180deg, rgb(10 27 42 / .72), rgb(10 27 42 / .94)), url('/images/homepage-hero.webp');
+    background-size: cover;
+    background-position: center;
+    opacity: .92;
+  }
+  .provider-nav-link { min-width: 0; }
+  .provider-nav-link:focus-visible { outline-color: #f1d6ad; }
+  @media (max-width: 1023px) {
+    .provider-sidebar { padding-bottom: 1.1rem; }
+    .provider-sidebar > div:nth-child(3) { margin-top: 1.2rem; }
+    .provider-sidebar > div:nth-child(3) h2 { font-size: 1.55rem; }
+    .provider-sidebar > div:nth-child(3) p:last-child { display: none; }
+    .provider-sidebar nav { margin-top: 1rem; display: flex; gap: .45rem; overflow-x: auto; padding-bottom: .2rem; scrollbar-width: thin; }
+    .provider-sidebar nav > p { display: none; }
+    .provider-nav-link { flex: 0 0 auto; min-height: 40px; padding-inline: .7rem; background: rgb(255 255 255 / .08); font-size: .75rem; }
+    .provider-nav-link > span { display: none; }
+  }
+}
+
+@layer components {
+  .admin-workspace { background: linear-gradient(145deg, #f7f6f2 0%, #edf0f2 56%, #f6f2e9 100%); }
+  .admin-sidebar {
+    isolation: isolate;
+    background: linear-gradient(155deg, #142b40 0%, #18384d 54%, #102334 100%);
+  }
+  .admin-sidebar-image {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    background-image: linear-gradient(180deg, rgb(10 27 42 / .72), rgb(10 27 42 / .96)), url('/images/homepage-hero.webp');
+    background-size: cover;
+    background-position: center;
+    opacity: .94;
+  }
+  .admin-nav-link:focus-visible { outline-color: #f1d6ad; }
+  .admin-main { min-width: 0; }
+  .admin-welcome { min-height: 290px; background: #172f43; }
+  .admin-welcome-image {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    background-image: linear-gradient(90deg, rgb(13 31 47 / .96) 0%, rgb(13 31 47 / .86) 48%, rgb(13 31 47 / .35) 100%), url('/images/homepage-hero.webp');
+    background-position: center 48%;
+    background-size: cover;
+  }
+  .admin-metric-card { min-height: 166px; }
+  @media (min-width: 1024px) {
+    .admin-sidebar { height: 100vh; overflow-y: auto; }
+  }
+  @media (max-width: 1023px) {
+    .admin-sidebar { padding-bottom: 1rem; }
+    .admin-sidebar > div:nth-child(3) { margin-top: 1.1rem; }
+    .admin-sidebar > div:nth-child(3) h2 { font-size: 1.55rem; }
+    .admin-sidebar > div:nth-child(3) p:last-child { display: none; }
+    .admin-sidebar-nav { margin-top: 1.1rem; display: flex; gap: 1.1rem; overflow-x: auto; padding-bottom: .25rem; scrollbar-width: thin; }
+    .admin-sidebar-nav > section { flex: 0 0 auto; }
+    .admin-sidebar-nav h3 { display: none; }
+    .admin-sidebar-nav ul { display: flex; gap: .4rem; }
+    .admin-nav-link { min-height: 38px; padding-inline: .7rem; background: rgb(255 255 255 / .07); font-size: .72rem; white-space: nowrap; }
+    .admin-nav-link > span { display: none; }
+  }
+  @media (max-width: 639px) {
+    .admin-welcome { min-height: 0; }
+    .admin-welcome-image { background-image: linear-gradient(90deg, rgb(13 31 47 / .94), rgb(13 31 47 / .76)), url('/images/homepage-hero.webp'); }
+    .admin-metric-card { min-height: 145px; }
+  }
+}

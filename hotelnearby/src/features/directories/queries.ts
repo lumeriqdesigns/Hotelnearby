@@ -1,0 +1,8 @@
+import "server-only";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+export async function getDirectoryData(kind:"attractions"|"businesses"|"events", locationId?:string, category?:string){
+ const supabase=await createSupabaseServerClient();
+ if(kind==="attractions"){let q=supabase.from("attractions").select("id,name,slug,category,description,address_line,latitude,longitude,image_url,website_url,location:location_nodes!inner(id,name,slug)").eq("publication_status","published").eq("verification_status","verified").order("name");if(locationId)q=q.eq("location_id",locationId);if(category)q=q.eq("category",category);return (await q).data??[];}
+ if(kind==="businesses"){let q=supabase.from("local_businesses").select("id,name,slug,business_type,description,address_line,latitude,longitude,image_url,website_url,phone_number,location:location_nodes!inner(id,name,slug)").eq("publication_status","published").eq("verification_status","verified").order("name");if(locationId)q=q.eq("location_id",locationId);if(category)q=q.eq("business_type",category);return (await q).data??[];}
+ let q=supabase.from("events").select("id,title,slug,event_type,description,starts_at,ends_at,time_zone,venue_name,address_line,latitude,longitude,organiser_name,organiser_contact,website_url,ticket_url,image_url,location:location_nodes!inner(id,name,slug)").eq("publication_status","published").eq("verification_status","verified").or(`starts_at.gte.${new Date().toISOString()},ends_at.gte.${new Date().toISOString()}`).order("starts_at");if(locationId)q=q.eq("location_id",locationId);if(category)q=q.eq("event_type",category);return (await q).data??[];
+}
